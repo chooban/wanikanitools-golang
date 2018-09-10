@@ -17,8 +17,6 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/newrelic/go-agent"
-	"github.com/newrelic/go-agent/_integrations/nrgin/v1"
 
 	"github.com/mattes/migrate"
 	_ "github.com/mattes/migrate/database/postgres"
@@ -40,15 +38,6 @@ func main() {
 	dbMigrate()
 
 	router := gin.Default()
-
-	if len(os.Getenv("NEW_RELIC_APP_NAME")) > 0 && len(os.Getenv("NEW_RELIC_LICENSE_KEY")) > 0 {
-		config := newrelic.NewConfig(os.Getenv("NEW_RELIC_APP_NAME"), os.Getenv("NEW_RELIC_LICENSE_KEY"))
-		app, err := newrelic.NewApplication(config)
-		if err != nil {
-			panic(err)
-		}
-		router.Use(nrgin.Middleware(app))
-	}
 
 	router.Use(CORSMiddleware())
 
@@ -96,7 +85,6 @@ func main() {
 			withApiKey.GET("/leeches.txt", leechesTxt)
 			withApiKey.GET("/leeches.json", leechesJson)
 			withApiKey.GET("/level/progress", levelProgress)
-			withApiKey.GET("/leeches/screensaver", leechesScreensaver)
 			withApiKey.GET("/leeches/lesson", leechesLesson)
 			withApiKey.POST("/leeches/trained", postLeechesTrained)
 			withApiKey.DELETE("/leeches/trained", deleteLeechesTrained)
@@ -689,26 +677,6 @@ func buildStageLevel(stageCount []int, levelMax []int) *StageLevel {
 	return &StageLevel{Level: level - 1, PercentageNextLevel: percentage}
 }
 
-func leechesScreensaver(c *gin.Context) {
-	apiKey := c.MustGet("apiKey").(string)
-
-	chUser := make(chan *User)
-	go getUser(apiKey, chUser)
-
-	leeches, _, _, resourceError := getLeeches(apiKey)
-	if resourceError != nil {
-		renderError(c, resourceError.Category, resourceError.ErrorMessage)
-		return
-	}
-
-	user := <-chUser
-	if len(user.Error) > 0 {
-		renderError(c, "user", user.Error)
-		return
-	}
-
-	c.HTML(http.StatusOK, "leeches.screensaver.tmpl.html", TemplateContext{User: user, Data: leeches})
-}
 
 func leechesList(c *gin.Context) {
 	apiKey := c.MustGet("apiKey").(string)
