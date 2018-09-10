@@ -4,7 +4,10 @@
   {{template "nav.tmpl.html" .}}
 
 <div class="container">
-    <div id="preview-warning" class="alert alert-warning" role="alert"><strong>You're not logged in!</strong> This is a preview. It's hightechbunny's leeches that you're looking at.</div>
+    <div id="preview-warning" class="alert alert-warning" role="alert">
+      <strong>You're not logged in!</strong>
+      This is a preview. It's chooban's leeches that you're looking at.
+    </div>
     <table class="table leeches">
         <thead>
             <tr>
@@ -32,7 +35,7 @@
                     <td>{{.WorstCurrentStreak}}</td>
                     <td>{{printf "%.2f" .WorstScore}}</td>
                 </tr>
-            {{end}}            
+            {{end}}
         </tbody>
     </table>
 </div>
