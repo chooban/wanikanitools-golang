@@ -17,8 +17,7 @@ import (
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-  "github.com/newrelic/go-agent"
-    "github.com/newrelic/go-agent/_integrations/nrgin/v1"
+  "github.com/newrelic/go-agent/_integrations/nrgin/v1"
 
 	"github.com/mattes/migrate"
 	_ "github.com/mattes/migrate/database/postgres"
