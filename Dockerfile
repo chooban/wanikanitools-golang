@@ -6,11 +6,16 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN go build -o main .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
 FROM alpine
 RUN adduser -S -D -H -h /app appuser
 USER appuser
-COPY --from=builder /go/bin/ /app/
+COPY --from=builder /app/main /app/
+COPY --from=builder /app/static /app/static/
+COPY --from=builder /app/data /app/data/
+COPY --from=builder /app/migrations /app/migrations/
+COPY --from=builder /app/templates /app/templates/
+
 WORKDIR /app
-CMD ["./"]
+CMD ["./main"]
