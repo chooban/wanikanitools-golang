@@ -1,9 +1,11 @@
 package main
 
-import "encoding/json"
-import "fmt"
-import "io/ioutil"
-import "net/url"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/url"
+)
 
 type StudyMaterials struct {
 	Data          []StudyMaterialsData `json:"data"`
@@ -56,7 +58,10 @@ func getStudyMaterials(apiKey string, chResult chan *StudyMaterials) {
 			return
 		}
 		v := url.Values{}
-		v.Set("updated_after", results.DataUpdatedAt)
+
+		if results.DataUpdatedAt != "" {
+			v.Set("updated_after", results.DataUpdatedAt)
+		}
 		results.Pages.NextURL = uri + "?" + v.Encode()
 	}
 
