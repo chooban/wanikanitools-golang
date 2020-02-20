@@ -5,3 +5,4 @@ data/*.csv
 data/*.json
 data/
 .DS_Store
+build/*sql

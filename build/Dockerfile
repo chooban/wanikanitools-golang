@@ -12,10 +12,10 @@ FROM alpine
 RUN adduser -S -D -H -h /app appuser
 USER appuser
 COPY --from=builder /app /app/
-COPY --from=builder /app/web /app/static/
+COPY --from=builder /app/static /app/static/
 COPY --from=builder /app/data /app/data/
 COPY --from=builder /app/migrations /app/migrations/
 COPY --from=builder /app/templates /app/templates/
 
 WORKDIR /app
-CMD ["./main"]
+CMD ["./wanikanitools-golang"]
