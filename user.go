@@ -2,6 +2,7 @@ package main
 
 import "encoding/json"
 
+// The User details from Wanikani
 type User struct {
 	Data struct {
 		CurrentVacationStartedAt string `json:"current_vacation_started_at"`

@@ -1,9 +1,11 @@
 package main
 
-import "encoding/json"
-import "fmt"
-import "io/ioutil"
-import "net/url"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/url"
+)
 
 var subjectsCache *Subjects
 var subjectsDataMap map[int]SubjectsData = make(map[int]SubjectsData)
@@ -85,7 +87,10 @@ func getSubjects(apiKey string, chResult chan *Subjects) {
 		}
 
 		v := url.Values{}
-		v.Set("updated_after", subjects.DataUpdatedAt)
+
+		if subjects.DataUpdatedAt != "" {
+			v.Set("updated_after", subjects.DataUpdatedAt)
+		}
 		subjects.Pages.NextURL = "https://api.wanikani.com/v2/subjects?" + v.Encode()
 	}
 

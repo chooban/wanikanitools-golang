@@ -1,9 +1,11 @@
 package main
 
-import "encoding/json"
-import "fmt"
-import "io/ioutil"
-import "net/url"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/url"
+)
 
 var apiKeyAssignmentsPageCounts map[string]int = make(map[string]int)
 
@@ -60,7 +62,9 @@ func getAssignments(apiKey string, chResult chan *Assignments) {
 			return
 		}
 		v := url.Values{}
-		v.Set("updated_after", results.DataUpdatedAt)
+		if results.DataUpdatedAt != "" {
+			v.Set("updated_after", results.DataUpdatedAt)
+		}
 		results.Pages.NextURL = uri + "?" + v.Encode()
 	}
 

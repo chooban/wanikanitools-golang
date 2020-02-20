@@ -1,9 +1,11 @@
 package main
 
-import "encoding/json"
-import "fmt"
-import "io/ioutil"
-import "net/url"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net/url"
+)
 
 type ReviewStatistics struct {
 	Data          []ReviewStatisticsData `json:"data"`
@@ -58,7 +60,10 @@ func getReviewStatistics(apiKey string, chResult chan *ReviewStatistics) {
 			return
 		}
 		v := url.Values{}
-		v.Set("updated_after", results.DataUpdatedAt)
+
+		if results.DataUpdatedAt != "" {
+			v.Set("updated_after", results.DataUpdatedAt)
+		}
 		results.Pages.NextURL = uri + "?" + v.Encode()
 	}
 
